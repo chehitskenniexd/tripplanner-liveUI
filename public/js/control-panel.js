@@ -41,6 +41,8 @@ $(document).ready(function () {
                 <span class="title">${activityName}</span>\n
                 <button class="btn btn-xs btn-danger remove btn-circle">x</button>\n
               </div>\n`)
+
+    	// note: add a click handler for the "x" button
     })
 
 
