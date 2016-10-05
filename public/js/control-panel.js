@@ -5,6 +5,7 @@ $(document).ready(function () {
     var hotelChoices = $('#hotel-choices');
     var restaurantChoices = $('#restaurant-choices');
     var activityChoices = $('#activity-choices');
+    var numDays = 1;
 
     //list options/select dropdown
     hotels.forEach(hotel =>
@@ -71,6 +72,22 @@ $(document).ready(function () {
             $(`.${replacedName}`).remove();
         })
     })
+
+    // add day button
+    $('#day-add').click(function(){
+        if($(".day-btn").hasClass("current-day")){
+            $(".day-btn").removeClass("current-day")
+            $("#selected-day").remove()
+        }
+
+        $(`<button class="btn btn-circle day-btn current-day day-${numDays}">${numDays}</button>\n`).insertBefore('#day-add')
+        $(`<span id = "selected-day">Day ${numDays}</span>`).insertBefore("#day-rm")
+        numDays++
+    })
+
+
+
+
 
 
 
