@@ -6,7 +6,7 @@ $(document).ready(function () {
 	var restaurantChoices = $('#restaurant-choices');
 	var activityChoices = $('#activity-choices');
 
-
+//list options/select dropdown
     hotels.forEach(hotel =>
         hotelChoices.append(`<option>${hotel.name}</option>`))
     restaurants.forEach(restaurant =>
@@ -14,6 +14,8 @@ $(document).ready(function () {
     activities.forEach(activity =>
         activityChoices.append(`<option>${activity.name}</option>`))  
 
+
+//add button hotels
 
     $('.add-hotel').click(function(){
     	var hotelName = hotelChoices.val();
@@ -24,6 +26,8 @@ $(document).ready(function () {
               </div>\n`)
     })
 
+//add button restuarant
+
       $('.add-restaurant').click(function(){
     	var restaurantName = restaurantChoices.val();
 
@@ -33,6 +37,7 @@ $(document).ready(function () {
               </div>\n`)
     })
 
+//add button activity
 
   $('.add-activity').click(function(){
     	var activityName = activityChoices.val();
