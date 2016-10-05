@@ -34,15 +34,13 @@ $(document).ready(function () {
                 <button class="rm-${replacedName}-btn btn btn-xs btn-danger remove btn-circle">x</button>\n
               </div>\n`;
 
-            dailyData[thisDay]['hotels'] = dailyData[thisDay]['hotels'].concat(toAppend);
+            dailyData[thisDay]['hotels'].push(toAppend);
             $('.hotel-list').append(toAppend);
             console.log(dailyData);
         }
 
         // add an event handler for click for x
-        $(`.rm-${replacedName}-btn`).click(function () {
-            $(`.${replacedName}`).remove();
-        })
+        createRemoveEventHandler(replacedName, dailyData, 'hotels');
     })
 
     //add button restuarant
@@ -62,15 +60,14 @@ $(document).ready(function () {
                 <button class="rm-${replacedName}-btn btn btn-xs btn-danger remove btn-circle">x</button>\n
               </div>\n`
 
-            dailyData[thisDay]['restaurants'] = dailyData[thisDay]['restaurants'].concat(toAppend);
+            dailyData[thisDay]['restaurants'].push(toAppend);
             $('.restaurant-list').append(toAppend);
             console.log(dailyData);
         }
 
         // add an event handler for click for x
-        $(`.rm-${replacedName}-btn`).click(function () {
-            $(`.${replacedName}`).remove();
-        })
+        createRemoveEventHandler(replacedName, dailyData, 'restaurants');
+
     })
 
     //add button activity
@@ -90,15 +87,13 @@ $(document).ready(function () {
                 <button class="rm-${replacedName}-btn btn btn-xs btn-danger remove btn-circle">x</button>\n
               </div>\n`
 
-            dailyData[thisDay]['activities'] = dailyData[thisDay]['activities'].concat(toAppend);
+            dailyData[thisDay]['activities'].push(toAppend);
             $('.activity-list').append(toAppend)
             console.log(dailyData);
         }
 
         // add an event handler for click for x
-        $(`.rm-${replacedName}-btn`).click(function () {
-            $(`.${replacedName}`).remove();
-        })
+        createRemoveEventHandler(replacedName, dailyData, 'activities');
     })
 
     // add day button
@@ -107,6 +102,11 @@ $(document).ready(function () {
             $(".day-btn").removeClass("current-day")
             $("#selected-day").remove()
         }
+
+        // Remove all existing li in the Day panel
+        $('.hotel-list').children().remove();
+        $('.restaurant-list').children().remove();
+        $('.activity-list').children().remove();
 
         $(`<button class="btn btn-circle day-btn current-day" id="day-${numDays}">${numDays}</button>\n`).insertBefore('#day-add')
         $(`<span id = "selected-day">Day ${numDays}</span>`).insertBefore("#day-rm")
@@ -130,13 +130,27 @@ $(document).ready(function () {
             var thisDay = `day${$('.current-day').text()}`;
             if (dailyData[thisDay]) {
                 if (dailyData[thisDay].hotels) {
-                    $('.hotel-list').append(dailyData[thisDay].hotels);
+                    dailyData[thisDay].hotels.forEach((hotel) => {
+                        $('.hotel-list').append(hotel);
+                        var replacedName = hotel.split(' ')[1].slice(7);
+                        createRemoveEventHandler(replacedName, dailyData, 'hotels');
+                    })
                 }
                 if (dailyData[thisDay].restaurants) {
-                    $('.restaurant-list').append(dailyData[thisDay].restaurants);
+                    dailyData[thisDay].restaurants.forEach((restaurant) => {
+                        $('.restaurant-list').append(restaurant);
+                        var replacedName = restaurant.split(' ')[1].slice(7);
+                        console.log(replacedName);
+                        createRemoveEventHandler(replacedName, dailyData, 'restaurants');
+                    })
                 }
                 if (dailyData[thisDay].activities) {
-                    $('.activity-list').append(dailyData[thisDay].activities);
+                    dailyData[thisDay].activities.forEach((activity) => {
+                        $('.activity-list').append(activity);
+                        var replacedName = activity.split(' ')[1].slice(7);
+                        console.log(replacedName);
+                        createRemoveEventHandler(replacedName, dailyData, 'activities');
+                    })
                 }
             }
         })
@@ -144,8 +158,6 @@ $(document).ready(function () {
         // increment the number of days
         numDays++
     })
-
-
 
 
 
@@ -159,6 +171,25 @@ function checkOrCreateData(dailyData, thisDay, property) {
         dailyData[thisDay] = {};
     }
     if (!dailyData[thisDay][property]) {
-        dailyData[thisDay][property] = '';
+        dailyData[thisDay][property] = [];
     }
+}
+
+function createRemoveEventHandler(replacedName, dailyData, property) {
+    $(`.rm-${replacedName}-btn`).click(function () {
+        console.log(dailyData);
+        var thisDay = `day${$('.current-day').text()}`;
+        var array = dailyData[thisDay][property];
+        for (let i = 0; i < array.length; ++i) {
+            console.log(replacedName);
+            console.log(array[i]);
+            console.log(array[i].includes(replacedName));
+            if (array[i].includes(replacedName)) {
+                dailyData[thisDay][property] = array.slice(0, i).concat(array.slice(i + 1, array.length));
+                break;
+            }
+        }
+        $(`.${replacedName}`).remove();
+        console.log(dailyData);
+    })
 }
